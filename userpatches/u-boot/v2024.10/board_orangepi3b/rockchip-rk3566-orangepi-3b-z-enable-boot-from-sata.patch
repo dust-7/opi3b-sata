@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ian Leung <ianleung7@gmail.com>
+Date: Mon, 2 Feb 2026 17:29:23 +0800
+Subject: rk3566-orangepi-3b: Enable boot from sata
+
+This enables U-Boot to read boot.scr on an attached SATA M.2 SSD, thus
+allowing booting directly from SPI flash to SSD.
+
+Signed-off-by: Ian Leung <ianleung7@gmail.com>
+---
+ configs/orangepi-3b-rk3566_defconfig                    | 1 +
+ dts/upstream/src/arm64/rockchip/rk3566-orangepi-3b.dtsi | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/configs/orangepi-3b-rk3566_defconfig b/configs/orangepi-3b-rk3566_defconfig
+index c64f6899752..33601895144 100644
+--- a/configs/orangepi-3b-rk3566_defconfig
++++ b/configs/orangepi-3b-rk3566_defconfig
+@@ -95,5 +95,6 @@ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_GENERIC=y
+ CONFIG_USB_DWC3=y
+ CONFIG_USB_DWC3_GENERIC=y
+ CONFIG_ERRNO_STR=y
+ CONFIG_ROCKCHIP_BOOT_MODE_REG=0
++CONFIG_DWC_AHCI=y
+diff --git a/dts/upstream/src/arm64/rockchip/rk3566-orangepi-3b.dtsi b/dts/upstream/src/arm64/rockchip/rk3566-orangepi-3b.dtsi
+index d539570f531..6a4ab7db9b6 100644
+--- a/dts/upstream/src/arm64/rockchip/rk3566-orangepi-3b.dtsi
++++ b/dts/upstream/src/arm64/rockchip/rk3566-orangepi-3b.dtsi
+@@ -51,10 +51,12 @@
+ 		enable-active-high;
+ 		gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pcie20_pwren>;
+ 		regulator-name = "vcc3v3_pcie30";
++		regulator-always-on;
++		regulator-boot-on;
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+ 		vin-supply = <&vcc3v3_sys>;
+ 	};
+ 
+@@ -452,11 +454,11 @@
+ &pcie2x1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pcie20_pins>;
+ 	reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_HIGH>;
+ 	vpcie3v3-supply = <&vcc3v3_pcie30>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &pinctrl {
+ 	bluetooth {
+ 		bt_reg_on_h: bt-reg-on-h {
+@@ -533,10 +535,15 @@
+ &saradc {
+ 	vref-supply = <&vcca_1v8>;
+ 	status = "okay";
+ };
+ 
++&sata2 {
++	target-supply = <&vcc3v3_pcie30>;
++	status = "okay";
++};
++
+ &sdhci {
+ 	bus-width = <8>;
+ 	cap-mmc-highspeed;
+ 	max-frequency = <200000000>;
+ 	mmc-hs200-1_8v;
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+
