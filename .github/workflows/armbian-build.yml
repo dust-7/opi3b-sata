@@ -1,0 +1,122 @@
+name: Build Armbian image
+
+on:
+  workflow_dispatch:
+    inputs:
+      armbian_runner_clean:
+        description: "Make some space on GH runners"
+        required: false
+        default: "Y"
+
+      armbian_artifacts:
+        description: "Upload PATH"
+        required: false
+        default: "build/output/{debs,images}/"
+
+      armbian_target:
+        description: "Build image or kernel"
+        required: false
+        default: "build"
+
+      armbian_branch:
+        description: "Choose framework branch"
+        required: false
+        default: "main"
+
+      armbian_kernel_branch:
+        description: "Choose kernel branch"
+        required: false
+        default: "current"
+
+      armbian_release:
+        description: "Choose userspace release"
+        required: false
+        default: "trixie"
+
+      armbian_version:
+        description: "Set different version"
+        required: false
+        default: ""
+
+      armbian_board:
+        description: "Select hardware platform"
+        required: false
+        default: "orangepi3b"
+
+      armbian_ui:
+        description: "Armbian user interface"
+        required: false
+        default: "server"
+
+      armbian_compress:
+        description: "Armbian compress method"
+        required: false
+        default: "sha,img,xz"
+
+      armbian_extensions:
+        description: "Armbian lists of extensions"
+        required: false
+        default: ""
+
+      armbian_userpatches:
+        description: "Armbian userpatches path"
+        required: false
+        default: ""
+
+      armbian_pgp_key:
+        description: "Armbian PGP key"
+        required: false
+        default: ""
+
+      armbian_pgp_password:
+        description: "Armbian PGP password"
+        required: false
+        default: ""
+
+      armbian_release_tittle:
+        description: "Armbian image"
+        required: false
+        default: "Armbian image"
+
+      armbian_release_body:
+        description: "Armbian images"
+        required: false
+        default: "Build with [Armbian tools](https://github.com/armbian/build)"
+
+      armbian_release_tag:
+        description: "Armbian release tag"
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Build Armbian image
+
+      uses: armbian/build@v26.2.0-trunk.379
+      with:
+        armbian_token: ${{ env.token }}
+        armbian_runner_clean: ${{ inputs.armbian_runner_clean }}
+        armbian_artifacts: ${{ inputs.armbian_artifacts }}
+        armbian_target: ${{ inputs.armbian_target }}
+        armbian_branch: ${{ inputs.armbian_branch }}
+        armbian_kernel_branch: ${{ inputs.armbian_kernel_branch }}
+        armbian_release: ${{ inputs.armbian_release }}
+        armbian_version: ${{ inputs.armbian_version }}
+        armbian_board: ${{ inputs.armbian_board }}
+        armbian_ui: ${{ inputs.armbian_ui }}
+        armbian_compress: ${{ inputs.armbian_compress }}
+        armbian_extensions: ${{ inputs.armbian_extensions }}
+        armbian_userpatches: ${{ inputs.armbian_userpatches }}
+        armbian_pgp_key: ${{ inputs.armbian_pgp_key }}
+        armbian_pgp_password: ${{ inputs.armbian_pgp_password }}
+        armbian_release_tittle: ${{ inputs.armbian_release_tittle }}
+        armbian_release_body: ${{ inputs.armbian_release_body }}
+        armbian_release_tag: ${{ inputs.armbian_release_tag }}
+
+      env:
+        token: ${{ secrets.GITHUB_TOKEN }}
