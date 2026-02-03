@@ -11,7 +11,7 @@ on:
       armbian_artifacts:
         description: "Upload PATH"
         required: false
-        default: "build/output/{debs,images}/"
+        default: "build/output/debs/linux-*,build/output/images/"
 
       armbian_target:
         description: "Build image or kernel"
