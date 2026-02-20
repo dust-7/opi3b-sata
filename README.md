@@ -1,3 +1,9 @@
+**Update:** Armbian now supports booting Orange Pi 3B from SATA SSDs. If you use Armbian, you can ignore this repo.
+
+For more info, [see PR](https://github.com/armbian/build/pull/9388).
+
+---
+
 This repo contains patches to enable an Orange Pi 3B to boot from SPI flash to a SATA M.2 SSD.
 
 Note that the patches drop support for NVME M.2 SSDs as a consequence.
